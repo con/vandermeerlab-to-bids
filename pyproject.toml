@@ -1,0 +1,95 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vandermeerlab_to_bids"]
+
+[project]
+name = "vandermeerlab_to_bids"
+version="0.1.0"
+authors = [
+  { name="Cody Baker", email="cody.c.baker.phd@gmail.com" },
+]
+description = "Conversion tools for ingesting data from the van der Meer group at Dartmouth College and outputting it into BEP-32 compliant datasets for upload to the DANDI Archive."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = {file = "LICENSE.txt"}
+
+keywords = ["SpikeGLX", "NeuroPixels", "NeuroPixels 2.0", "multi-shank", "Odor", "NWB", "BIDS", "open data", "ecephys", "extracellular electrophysiology"]
+
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: Unix",
+]
+
+dependencies = [
+    "neuroconv",
+    "click"
+]
+
+[project.optional-dependencies]
+# TODO: add exact pins or otherwise freeze environment somehow
+randi_nature_2023 = [
+    "neuroconv[spikeglx]",
+]
+
+dandi = [
+    "dandi",
+]
+
+[project.scripts]
+# TODO: add proper CLIs
+vandermeerlab_convert_prototype = "vandermeerlab_to_bids._manish_2025._command_line_interface:_cli"
+
+[project.urls]
+"Homepage" = "https://github.com/con/vandermeerlab-to-bids"
+"Bug Tracker" = "https://github.com/con/vandermeerlab-to-bids/issues"
+
+
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  \.toml
+  |\.yml
+  |\.txt
+  |\.sh
+  |\.git
+  |\.ini
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+
+
+[tool.ruff]
+exclude = [
+  "*/__init__.py"
+]
+
+[tool.ruff.lint.isort]
+relative-imports-order = "closest-to-furthest"
+known-first-party = ["vandermeerlab_to_nwb"]
+
+
+
+[tool.codespell]
+skip = '.git*,*.pdf,*.css'
+check-hidden = true
