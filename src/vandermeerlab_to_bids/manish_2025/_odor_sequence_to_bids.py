@@ -8,7 +8,7 @@ import yaml
 import dateutil.tz
 import pydantic
 
-from ._randi_nature_2023_converter import RandiNature2023Converter
+from ._manish_2025_converter import Manish2025Converter
 
 
 @pydantic.validate_call

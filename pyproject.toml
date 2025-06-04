@@ -33,7 +33,7 @@ classifiers = [
 
 dependencies = [
     "neuroconv",
-    "click"
+    "click",
 ]
 
 [project.optional-dependencies]
