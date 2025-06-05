@@ -2,6 +2,7 @@ import pydantic
 import json
 from ._experiment_keys import read_experiment_keys_file
 
+
 @pydantic.validate_call
 def enhance_metadata(*, metadata: dict, directory_path: pydantic.DirectoryPath) -> None:
     """Operating in-place, enhance the default NeuroConv metadata."""

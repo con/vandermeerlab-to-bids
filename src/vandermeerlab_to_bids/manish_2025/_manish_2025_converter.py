@@ -1,8 +1,5 @@
-import copy
 
 import neuroconv.converters
-import pynwb
-from pydantic import FilePath
 
 # from ..manish_2025.interfaces._odor_sequence_neuropixels_converter import OdorSequenceNeuropixelsConverter
 

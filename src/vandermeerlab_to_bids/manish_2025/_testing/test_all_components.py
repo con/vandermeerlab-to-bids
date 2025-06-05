@@ -6,13 +6,11 @@ An actual conversion should use the `convert_*.py` scripts.
 This just makes debugging easier.
 """
 
-import datetime
 import pathlib
 import warnings
 import neuroconv.converters
 import pynwb
 import vandermeerlab_to_bids.utils
-from dateutil import tz
 import pynwb.testing.mock.file
 
 import vandermeerlab_to_bids
@@ -21,7 +19,7 @@ import vandermeerlab_to_bids.manish_2025
 # Define base folder of source data
 # Change these as needed on new systems
 BASE_DIRECTORY = pathlib.Path("E:/bids_32_examples") / "mvdm" / "OdorSequence" / "sourcedata"
-SUBJECT_ID =  "M541"
+SUBJECT_ID = "M541"
 SESSION_ID = "2024-08-31"
 
 BIDS_DIRECTORY = BASE_DIRECTORY / "bids"
@@ -48,7 +46,11 @@ processed_data_directory = BASE_DIRECTORY / "preprocessed" / SUBJECT_ID / f"{SUB
 components_to_test = {
     neuroconv.converters.SpikeGLXConverterPipe: {
         "source_data": {"folder_path": raw_data_directory},
-        "conversion_options": {"imec0.ap": {"stub_test": True}, "imec1.ap": {"stub_test": True}, "nidq": {"stub_test": True}},
+        "conversion_options": {
+            "imec0.ap": {"stub_test": True},
+            "imec1.ap": {"stub_test": True},
+            "nidq": {"stub_test": True},
+        },
     },
 }
 

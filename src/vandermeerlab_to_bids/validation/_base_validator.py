@@ -1,5 +1,7 @@
 import pathlib
 import pydantic
+
+
 class BaseValidator:
     """
     Base class for validators in the van der Meer Lab to BIDS conversion process.
@@ -16,4 +18,3 @@ class BaseValidator:
 
         self.records_directory = self.home_directory / "records"
         self.records_directory.mkdir(exist_ok=True)
-

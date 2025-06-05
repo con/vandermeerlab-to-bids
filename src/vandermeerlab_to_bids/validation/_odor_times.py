@@ -2,6 +2,7 @@ from ._base_validator import BaseValidator
 import numpy
 from ..utils import read_experiment_keys_file
 
+
 class OdorTimesValidator(BaseValidator):
     """
     Validator for odor times in the source data.
@@ -22,7 +23,11 @@ class OdorTimesValidator(BaseValidator):
 
             experiment_keys = read_experiment_keys_file(file_path=experiment_key_file_path)
 
-            odor_channels = {key: channel for key, channel in experiment_keys.items() if key.startswith("odor") and key.endswith("_channel")}
+            odor_channels = {
+                key: channel
+                for key, channel in experiment_keys.items()
+                if key.startswith("odor") and key.endswith("_channel")
+            }
 
             for key, channel in odor_channels.items():
                 on_file_path = experiment_key_file_path.parent / f"{channel}_ON.txt"
