@@ -40,9 +40,6 @@ test_folder_path.mkdir(exist_ok=True)
 raw_data_directory = BASE_DIRECTORY / "raw" / SUBJECT_ID / f"{SUBJECT_ID}-{SESSION_ID}_g0"
 processed_data_directory = BASE_DIRECTORY / "preprocessed" / SUBJECT_ID / f"{SUBJECT_ID}-{SESSION_ID}"
 
-# TODO: incorporate
-# session_start_time = session_start_time.replace(tzinfo=tz.gettz("US/Eastern"))
-
 components_to_test = {
     neuroconv.converters.SpikeGLXConverterPipe: {
         "source_data": {"folder_path": raw_data_directory},
