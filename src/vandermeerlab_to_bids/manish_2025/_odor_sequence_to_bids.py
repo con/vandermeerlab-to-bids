@@ -5,7 +5,6 @@ import typing
 import pydantic
 
 
-
 @pydantic.validate_call
 def odor_sequence_to_bids(
     *,
