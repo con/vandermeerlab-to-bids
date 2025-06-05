@@ -13,7 +13,6 @@ def enhance_metadata(*, metadata: dict, directory_path: pydantic.DirectoryPath) 
         json_encoded = json.dumps(obj=json_decoded)
         metadata["Ecephys"]["Device"][probe_index]["description"] = json_encoded
 
-    subject_id = directory_path.parent.name
     session_name = directory_path.name
     experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
     experiment_keys_file_path = directory_path / experiment_keys_file_name

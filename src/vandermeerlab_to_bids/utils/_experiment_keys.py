@@ -44,8 +44,8 @@ def read_experiment_keys_file(file_path: str | pathlib.Path) -> dict[str, str]:
     return experiment_keys
 
 
-def _comment_replacer(match: re.Match[str]) -> str:
-    quoted, comment = match.group(1), match.group(2)
+def _comment_replacer(match: re.Match[str, str, ...]) -> str:
+    quoted, _ = match.group(1), match.group(2)
     if quoted:
         return quoted
     else:

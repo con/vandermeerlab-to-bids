@@ -70,12 +70,10 @@ def _odor_sequence_to_bids_cli(
     bids_directory: pydantic.DirectoryPath,
     testing: bool = False,
 ) -> None:
-    subject_info_file_path = pathlib.Path(subject_info_file_path)
     bids_directory = pathlib.Path(bids_directory)
 
     odor_sequence_to_bids(
         data_directory=data_directory,
-        subject_info_file_path=subject_info_file_path,
         subject_id=subject_id,
         bids_directory=bids_directory,
         raw_or_processed="processed",
@@ -84,7 +82,6 @@ def _odor_sequence_to_bids_cli(
 
     odor_sequence_to_bids(
         data_directory=data_directory,
-        subject_info_file_path=subject_info_file_path,
         subject_id=subject_id,
         bids_directory=bids_directory,
         raw_or_processed="raw",
