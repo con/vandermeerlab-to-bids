@@ -7,7 +7,10 @@ from ._experiment_keys import read_experiment_keys_file
 
 def enhance_metadata(*, metadata: neuroconv.utils.DeepDict, directory_path: pydantic.DirectoryPath) -> None:
     """Operating in-place, enhance the default NeuroConv metadata."""
+    session_name = directory_path.name
+    session_id = directory_path.name.replace("-", "")  # TODO: temporary
 
+    metadata["NWBFile"]["session_id"] = session_id  # TODO: Might want to adjust later
     metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"].replace(
         tzinfo=dateutil.tz.gettz("US/Eastern")
     )
@@ -18,7 +21,6 @@ def enhance_metadata(*, metadata: neuroconv.utils.DeepDict, directory_path: pyda
         json_encoded = json.dumps(obj=json_decoded)
         metadata["Ecephys"]["Device"][probe_index]["description"] = json_encoded
 
-    session_name = directory_path.name
     experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
     experiment_keys_file_path = directory_path / experiment_keys_file_name
 
