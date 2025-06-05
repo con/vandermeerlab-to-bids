@@ -1,6 +1,5 @@
 import pydantic
 import json
-from ._experiment_keys import read_experiment_keys_file
 
 
 @pydantic.validate_call
@@ -13,11 +12,11 @@ def enhance_metadata(*, metadata: dict, directory_path: pydantic.DirectoryPath) 
         json_encoded = json.dumps(obj=json_decoded)
         metadata["Ecephys"]["Device"][probe_index]["description"] = json_encoded
 
-    session_name = directory_path.name
-    experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
-    experiment_keys_file_path = directory_path / experiment_keys_file_name
+    # session_name = directory_path.name
+    # experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
+    # experiment_keys_file_path = directory_path / experiment_keys_file_name
 
-    experiment_keys = read_experiment_keys_file(file_path=experiment_keys_file_path)
+    # experiment_keys = read_experiment_keys_file(file_path=experiment_keys_file_path)
 
     # TODO: Update electrode group locations from experiment keys
     # Insertion details will have to be attached a different way
