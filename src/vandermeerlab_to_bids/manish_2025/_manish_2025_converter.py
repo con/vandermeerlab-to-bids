@@ -1,14 +1,14 @@
 import copy
 
-import neuroconv
+import neuroconv.converters
 import pynwb
 from pydantic import FilePath
 
-# from vandermeerlab_to_bids.manish_2025.interfaces import (
-# )
+# from ..manish_2025.interfaces._odor_sequence_neuropixels_converter import OdorSequenceNeuropixelsConverter
 
 
 class Manish2025Converter(neuroconv.NWBConverter):
-    data_interface_classes = {}
-
-    # TODO
+    # data_interface_classes = {
+    #     "SpikeGLXConverterPipe": neuroconv.converters.SpikeGLXConverterPipe,
+    # }
+    pass

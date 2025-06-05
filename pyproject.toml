@@ -16,10 +16,10 @@ authors = [
 ]
 description = "Conversion tools for ingesting data from the van der Meer group at Dartmouth College and outputting it into BEP-32 compliant datasets for upload to the DANDI Archive."
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.13"
 license = {file = "LICENSE.txt"}
 
-keywords = ["SpikeGLX", "NeuroPixels", "NeuroPixels 2.0", "multi-shank", "Odor", "NWB", "BIDS", "open data", "ecephys", "extracellular electrophysiology"]
+keywords = ["SpikeGLX", "NeuroPixels", "NeuroPixels 2.0", "multi-shank", "odor", "NWB", "BIDS", "open data", "ecephys", "extracellular electrophysiology"]
 
 classifiers = [
     "Programming Language :: Python",
@@ -32,7 +32,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "neuroconv",
+    "neuroconv[spikeglx]",
     "click",
 ]
 

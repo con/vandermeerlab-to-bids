@@ -9,20 +9,22 @@ This just makes debugging easier.
 import datetime
 import pathlib
 import warnings
-
+import neuroconv.converters
 import pynwb
+import vandermeerlab_to_bids.utils
 from dateutil import tz
-from pynwb.testing.mock.file import mock_NWBFile
+import pynwb.testing.mock.file
 
-from vandermeerlab_to_bids.manish_2025 import Manish2025Converter
+import vandermeerlab_to_bids
+import vandermeerlab_to_bids.manish_2025
 
 # Define base folder of source data
 # Change these as needed on new systems
-DATA_DIRECTORY = pathlib.Path("E:/mvdm")
+BASE_DIRECTORY = pathlib.Path("E:/bids_32_examples") / "mvdm" / "OdorSequence" / "sourcedata"
 SUBJECT_ID =  "M541"
 SESSION_ID = "2024-08-31"
 
-BIDS_DIRECTORY = DATA_DIRECTORY / "bids"
+BIDS_DIRECTORY = BASE_DIRECTORY / "bids"
 BIDS_DIRECTORY.mkdir(exist_ok=True)
 
 # *************************************************************************
@@ -33,35 +35,38 @@ BIDS_DIRECTORY.mkdir(exist_ok=True)
 warnings.filterwarnings(action="ignore", message="The linked table for DynamicTableRegion*", category=UserWarning)
 
 BIDS_DIRECTORY.mkdir(exist_ok=True)
-test_folder_path = BIDS_DIRECTORY / "test_interfaces"
+test_folder_path = BIDS_DIRECTORY / "test_components"
 test_folder_path.mkdir(exist_ok=True)
 
 # Parse session start time from the pumpprobe path
-session_string = PUMPPROBE_FOLDER_PATH.stem.removeprefix("pumpprobe_")
-session_start_time = datetime.datetime.strptime(session_string, "%Y%m%d_%H%M%S")
-session_start_time = session_start_time.replace(tzinfo=tz.gettz("US/Eastern"))
+raw_data_directory = BASE_DIRECTORY / "raw" / SUBJECT_ID / f"{SUBJECT_ID}-{SESSION_ID}_g0"
+processed_data_directory = BASE_DIRECTORY / "preprocessed" / SUBJECT_ID / f"{SUBJECT_ID}-{SESSION_ID}"
 
-interfaces_classes_to_test = {
-    # TODO
-    # "PumpProbeImagingInterfaceGreen": {
-    #     "source_data": {"pump_probe_folder_path": PUMPPROBE_FOLDER_PATH, "channel_name": "Green"},
-    #     "conversion_options": {"stub_test": True},
-    # },
+# TODO: incorporate
+# session_start_time = session_start_time.replace(tzinfo=tz.gettz("US/Eastern"))
+
+components_to_test = {
+    neuroconv.converters.SpikeGLXConverterPipe: {
+        "source_data": {"folder_path": raw_data_directory},
+        "conversion_options": {"imec0.ap": {"stub_test": True}, "imec1.ap": {"stub_test": True}, "nidq": {"stub_test": True}},
+    },
 }
 
+for component_to_test, component_options in components_to_test.items():
+    source_data = component_options["source_data"]
+    conversion_options = component_options.get("conversion_options", None)
 
-for test_case_name, interface_options in interfaces_classes_to_test.items():
-    source_data = {test_case_name: interface_options["source_data"]}
-    converter = Manish2025Converter(source_data=source_data)
+    converter = component_to_test(**source_data)
 
     metadata = converter.get_metadata()
+    vandermeerlab_to_bids.utils.enhance_metadata(metadata=metadata, directory_path=processed_data_directory)
 
-    in_memory_nwbfile = mock_NWBFile()
+    in_memory_nwbfile = pynwb.testing.mock.file.mock_NWBFile()
     converter.add_to_nwbfile(nwbfile=in_memory_nwbfile, metadata=metadata, conversion_options=conversion_options)
 
     print("Added to in-memory NWBFile object!")
 
-    nwbfile_path = test_folder_path / f"test_{test_case_name}.nwb"
+    nwbfile_path = test_folder_path / f"test_{component_to_test.__name__}.nwb"
     converter.run_conversion(
         nwbfile_path=nwbfile_path, metadata=metadata, conversion_options=conversion_options, overwrite=True
     )
