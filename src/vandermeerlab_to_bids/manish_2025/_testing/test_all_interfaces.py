@@ -19,7 +19,7 @@ from vandermeerlab_to_bids.manish_2025 import Manish2025Converter
 # Define base folder of source data
 # Change these as needed on new systems
 DATA_DIRECTORY = pathlib.Path("E:/mvdm")
-SUBJECT_ID =  "M541"
+SUBJECT_ID = "M541"
 SESSION_ID = "2024-08-31"
 
 BIDS_DIRECTORY = DATA_DIRECTORY / "bids"
