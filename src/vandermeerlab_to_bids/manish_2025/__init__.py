@@ -1,9 +1,9 @@
 """Exposed outer imports of the data conversion."""
 
-from ._manish_2025_converter import Manish2025Converter
+from .interfaces import OdorIntervalsInterface
 from ._odor_sequence_to_bids import odor_sequence_to_bids
 
 __all__ = [
-    "Manish2025Converter",
+    "OdorIntervalsInterface",
     "odor_sequence_to_bids",
 ]

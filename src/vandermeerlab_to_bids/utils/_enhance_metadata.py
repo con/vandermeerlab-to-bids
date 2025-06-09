@@ -5,15 +5,19 @@ import neuroconv.utils.dict
 from ._experiment_keys import read_experiment_keys_file
 
 
-def enhance_metadata(*, metadata: neuroconv.utils.DeepDict, directory_path: pydantic.DirectoryPath) -> None:
+def enhance_metadata(
+    *, metadata: neuroconv.utils.DeepDict, preprocessed_data_directory: pydantic.DirectoryPath
+) -> None:
     """Operating in-place, enhance the default NeuroConv metadata."""
-    session_name = directory_path.name
-    session_id = directory_path.name.replace("-", "")  # TODO: temporary
+    session_name = preprocessed_data_directory.name
+    session_id = preprocessed_data_directory.name.replace("-", "")  # TODO: temporary
 
     metadata["NWBFile"]["session_id"] = session_id  # TODO: Might want to adjust later
-    metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"].replace(
-        tzinfo=dateutil.tz.gettz("US/Eastern")
-    )
+
+    if metadata["NWBFile"].get("session_start_time", None) is not None:
+        metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"].replace(
+            tzinfo=dateutil.tz.gettz("US/Eastern")
+        )
 
     for probe_index in range(len(metadata["Ecephys"]["Device"])):
         json_decoded = json.loads(s=metadata["Ecephys"]["Device"][probe_index]["description"])
@@ -22,7 +26,7 @@ def enhance_metadata(*, metadata: neuroconv.utils.DeepDict, directory_path: pyda
         metadata["Ecephys"]["Device"][probe_index]["description"] = json_encoded
 
     experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
-    experiment_keys_file_path = directory_path / experiment_keys_file_name
+    experiment_keys_file_path = preprocessed_data_directory / experiment_keys_file_name
 
     experiment_keys = read_experiment_keys_file(file_path=experiment_keys_file_path)
 
