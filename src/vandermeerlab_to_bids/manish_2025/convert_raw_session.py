@@ -2,7 +2,6 @@
 
 import pathlib
 
-
 from vandermeerlab_to_bids.manish_2025 import odor_sequence_to_bids
 
 # TESTING=True creates 'preview' files that truncate all major data blocks; useful for ensuring process runs smoothly
@@ -14,21 +13,21 @@ TESTING = True
 
 # Define base folder of source data
 # Change these as needed on new systems
-DATA_DIRECTORY = pathlib.Path("E:/mvdm")
+DATA_DIRECTORY = pathlib.Path("E:/") / "bids_32_examples" / "mvdm" / "OdorSequence" / "sourcedata"
 SUBJECT_ID = "M541"
+SESSION_ID = "2024-08-31"
 
 
-OUTPUT_FOLDER_PATH = pathlib.Path("E:/mvdm")
-BIDS_OUTPUT_FOLDER_PATH = OUTPUT_FOLDER_PATH / "bids"
-BIDS_OUTPUT_FOLDER_PATH.mkdir(exist_ok=True)
+BIDS_DIRECTORY = DATA_DIRECTORY / "bids"
+BIDS_DIRECTORY.mkdir(exist_ok=True)
 
 
 if __name__ == "__main__":
     odor_sequence_to_bids(
         data_directory=DATA_DIRECTORY,
-        subject_info_file_path=SUBJECT_INFO_FILE_PATH,
         subject_id=SUBJECT_ID,
-        nwb_output_folder_path=BIDS_OUTPUT_FOLDER_PATH,
+        session_id=SESSION_ID,
+        bids_directory=BIDS_DIRECTORY,
         raw_or_processed="raw",
         testing=TESTING,
     )

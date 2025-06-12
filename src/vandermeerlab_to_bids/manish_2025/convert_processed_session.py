@@ -25,7 +25,6 @@ BIDS_DIRECTORY.mkdir(exist_ok=True)
 if __name__ == "__main__":
     odor_sequence_to_bids(
         data_directory=DATA_DIRECTORY,
-        subject_info_file_path=SUBJECT_INFO_FILE_PATH,
         subject_id=SUBJECT_ID,
         bids_directory=BIDS_DIRECTORY,
         raw_or_processed="processed",

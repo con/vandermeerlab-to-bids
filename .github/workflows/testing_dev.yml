@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12"]  # Keep this in the form of a matrix to easily add future versions
+        python-version: ["3.13"]  # Keep this in the form of a matrix to easily add future versions
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
