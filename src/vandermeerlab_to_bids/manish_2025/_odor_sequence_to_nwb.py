@@ -38,7 +38,11 @@ def odor_sequence_to_nwb(
             spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
 
             metadata = spikeglx_converter.get_metadata()
-            enhance_metadata(metadata=metadata, preprocessed_data_directory=preprocessed_data_directory)
+            enhance_metadata(
+                metadata=metadata,
+                preprocessed_data_directory=preprocessed_data_directory,
+                spikeglx_converter=spikeglx_converter,
+            )
 
             conversion_options = {
                 "imec0.ap": {"stub_test": testing},

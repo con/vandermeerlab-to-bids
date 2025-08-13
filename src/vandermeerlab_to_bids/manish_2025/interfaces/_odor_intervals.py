@@ -1,4 +1,5 @@
 import neuroconv
+import numpy
 import pydantic
 import pynwb
 import re
@@ -43,11 +44,16 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
         odorant_id_to_chemical = dict()
         odorant_id_to_concentration = dict()
         for odor_id in odor_ids:
+            if odor_id == "neutral":
+                odorant_id_to_concentration[odor_id] = numpy.nan
+                odorant_id_to_chemical[odor_id] = "neutral"  # TODO: improve
+                continue
+
             odorant_key = f"odor{odor_id}"
             odorant_details = self.experiment_keys.get(odorant_key, None)
 
             if odorant_details is None:
-                concentration = None
+                concentration = numpy.nan
                 chemical = "Localizer"
             else:
                 odorant_split = odorant_details.split(" ")
@@ -60,7 +66,8 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
 
         all_trials = []
         for odor_id in odor_ids:
-            channel_name = self.experiment_keys[f"odor{odor_id}_channel"]
+            channel_key = f"odor{odor_id}_channel" if odor_id != "neutral" else "neutral_odor_channel"
+            channel_name = self.experiment_keys[channel_key]
 
             on_channel_file_path = self.preprocessed_data_directory / f"{channel_name}_ON.txt"
             off_channel_file_path = self.preprocessed_data_directory / f"{channel_name}_OFF.txt"
@@ -144,6 +151,7 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
             for key in self.experiment_keys.keys()
             if (result := re.match(pattern=pattern, string=key)) is not None
         ]
+        matches.append("neutral")
         return matches
 
     def _get_block_ids(self) -> list[str]:
