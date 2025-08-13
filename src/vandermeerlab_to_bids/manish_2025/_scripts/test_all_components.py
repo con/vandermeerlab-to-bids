@@ -24,9 +24,6 @@ BASE_DIRECTORY = pathlib.Path("E:/bids_32_examples") / "mvdm" / "OdorSequence" /
 SUBJECT_ID = "M541"
 SESSION_ID = "2024-08-31"
 
-BIDS_DIRECTORY = BASE_DIRECTORY / "bids"
-BIDS_DIRECTORY.mkdir(exist_ok=True)
-
 # *************************************************************************
 # Everything below this line is automated and should not need to be changed
 # *************************************************************************
@@ -34,8 +31,7 @@ BIDS_DIRECTORY.mkdir(exist_ok=True)
 # Suppress false warning
 warnings.filterwarnings(action="ignore", message="The linked table for DynamicTableRegion*", category=UserWarning)
 
-BIDS_DIRECTORY.mkdir(exist_ok=True)
-test_folder_path = BIDS_DIRECTORY / "test_components"
+test_folder_path = BASE_DIRECTORY.parent / "test_components"
 test_folder_path.mkdir(exist_ok=True)
 
 # Parse session start time from the pumpprobe path
