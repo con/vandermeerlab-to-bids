@@ -18,8 +18,8 @@ SUBJECT_ID = "M541"
 SESSION_ID = "2024-08-31"
 
 
-BIDS_DIRECTORY = DATA_DIRECTORY / "bids"
-BIDS_DIRECTORY.mkdir(exist_ok=True)
+DANDISET_DIRECTORY = DATA_DIRECTORY.parent / "bids" / "001470"
+DANDISET_DIRECTORY.mkdir(exist_ok=True)
 
 
 if __name__ == "__main__":
@@ -27,7 +27,6 @@ if __name__ == "__main__":
         data_directory=DATA_DIRECTORY,
         subject_id=SUBJECT_ID,
         session_id=SESSION_ID,
-        bids_directory=BIDS_DIRECTORY,
-        raw_or_processed="raw",
+        bids_directory=DANDISET_DIRECTORY,
         testing=TESTING,
     )

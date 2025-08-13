@@ -34,6 +34,7 @@ classifiers = [
 dependencies = [
     "neuroconv[spikeglx]",
     "click",
+    "nwb2bids",
 ]
 
 [project.optional-dependencies]

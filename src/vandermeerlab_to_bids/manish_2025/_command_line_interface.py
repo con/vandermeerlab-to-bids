@@ -67,6 +67,7 @@ def _odor_sequence_to_bids_cli(
     *,
     data_directory: pydantic.DirectoryPath,
     subject_id: str,
+    session_id: str,
     bids_directory: pydantic.DirectoryPath,
     testing: bool = False,
 ) -> None:
@@ -75,15 +76,7 @@ def _odor_sequence_to_bids_cli(
     odor_sequence_to_bids(
         data_directory=data_directory,
         subject_id=subject_id,
+        session_id=session_id,
         bids_directory=bids_directory,
-        raw_or_processed="processed",
-        testing=testing,
-    )
-
-    odor_sequence_to_bids(
-        data_directory=data_directory,
-        subject_id=subject_id,
-        bids_directory=bids_directory,
-        raw_or_processed="raw",
         testing=testing,
     )

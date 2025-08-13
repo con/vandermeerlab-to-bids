@@ -10,9 +10,14 @@ def enhance_metadata(
 ) -> None:
     """Operating in-place, enhance the default NeuroConv metadata."""
     session_name = preprocessed_data_directory.name
-    session_id = preprocessed_data_directory.name.replace("-", "")  # TODO: temporary
+    session_id = preprocessed_data_directory.name.replace("-", "")
 
-    metadata["NWBFile"]["session_id"] = session_id  # TODO: Might want to adjust later
+    experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
+    experiment_keys_file_path = preprocessed_data_directory / experiment_keys_file_name
+    experiment_keys = read_experiment_keys_file(file_path=experiment_keys_file_path)
+
+    metadata["NWBFile"]["session_id"] = session_id
+    metadata["NWBFile"]["session_description"] = " | ".join(experiment_keys["sessiontype"])
 
     if metadata["NWBFile"].get("session_start_time", None) is not None:
         metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"].replace(
@@ -24,11 +29,6 @@ def enhance_metadata(
         json_decoded["probe_type_description"] = "Neuropixels 2.0 - Four Shank"
         json_encoded = json.dumps(obj=json_decoded)
         metadata["Ecephys"]["Device"][probe_index]["description"] = json_encoded
-
-    experiment_keys_file_name = f"{session_name.replace("-", "_")}_keys.m"
-    experiment_keys_file_path = preprocessed_data_directory / experiment_keys_file_name
-
-    experiment_keys = read_experiment_keys_file(file_path=experiment_keys_file_path)
 
     metadata["Subject"]["subject_id"] = experiment_keys["subject"]
     metadata["Subject"]["species"] = "Mus musculus"  # Just hard-coding since they aren't going to change

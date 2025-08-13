@@ -9,7 +9,7 @@ import json
 @pydantic.validate_call
 def read_experiment_keys_file(file_path: str | pathlib.Path) -> dict[str, str]:
     """
-    Reads the experiment keys file and returns a dictionary of keys and values.
+    Reads the experiment keys (.m) file and returns a dictionary of keys and values.
 
     Works by coercing the structured text into a JSON string, which is then converted into dictionary using
     built-in JSON parsing.
@@ -27,18 +27,35 @@ def read_experiment_keys_file(file_path: str | pathlib.Path) -> dict[str, str]:
         The metadata dictionary.
     """
     content = file_path.read_text()
+
+    # Remove comments
     comment_stripped_content = re.sub(
         pattern=r'("([^"\\]|\\.)*")|(%.*$)', repl=_comment_replacer, string=content, flags=re.MULTILINE
     )
+
+    # Remove excessive line breaks
     collapsed_content = re.sub(pattern=r"\n+", repl="\n", string=comment_stripped_content)
+
+    # Remove trailing semicolons
     clipped_content = re.sub(pattern=r";.*$", repl="", string=collapsed_content, flags=re.MULTILINE)
+
+    # Remove the 'ExpKeys' prefix and format keys as JSON
     cleaned_content = (
         re.sub(pattern=r"ExpKeys\.", repl='"', string=clipped_content, flags=re.MULTILINE)
-        .replace("+", "")
+        # Only remove '+ <integer>' patterns
         .replace(" = ", '": ')
     )
-    cleaned_content = re.sub(pattern=r":\s+", repl=": ", string=cleaned_content)
-    json_content = f"{{{cleaned_content.replace("\n", ", ").replace("{", "[").replace("}", "]").replace("\'", '\"')}}}"
+
+    # Remove leading '+' symbols from integers but leave it for strings
+    plus_stripped_content = re.sub(pattern=r"\+\s*(\d+)", repl=r"\1", string=cleaned_content)
+
+    # Format spaces after colons
+    formatted_content = re.sub(pattern=r":\s+", repl=": ", string=plus_stripped_content)
+
+    # Wrap all in JSON object (dictionary)
+    json_content = (
+        f"{{{formatted_content.replace("\n", ", ").replace("{", "[").replace("}", "]").replace("\'", '\"')}}}"
+    )
 
     experiment_keys = json.loads(s=json_content)
     return experiment_keys
