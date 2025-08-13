@@ -8,7 +8,13 @@ import pydantic
 from ._odor_sequence_to_bids import odor_sequence_to_bids
 
 
-@click.command(name="odor_sequence_to_bids")
+# vandermeerlab2bids
+@click.group()
+def _vandermeerlab2bids_cli():
+    pass
+
+
+@_vandermeerlab2bids_cli.command(name="odorseq")
 @click.option(
     "--data_directory",
     help="""
@@ -41,6 +47,12 @@ For example...
 )
 @click.option(
     "--subject_id",
+    help="ID of the subject.",
+    required=True,
+    type=str,
+)
+@click.option(
+    "--session_id",
     help="ID of the subject.",
     required=True,
     type=str,
