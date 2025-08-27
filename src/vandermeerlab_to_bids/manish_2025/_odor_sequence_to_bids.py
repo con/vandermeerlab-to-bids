@@ -1,4 +1,4 @@
-"""Main code definition for the conversion of a full session (including NeuroPAL)."""
+"""Main code definition for the conversion of a full session to BIDS."""
 
 import pydantic
 
@@ -20,24 +20,15 @@ def odor_sequence_to_bids(
     nwb_directory = bids_directory.parent / "nwb"
     nwb_directory.mkdir(exist_ok=True)
 
-    odor_sequence_to_nwb(
-        data_directory=data_directory,
-        subject_id=subject_id,
-        session_id=session_id,
-        nwb_directory=nwb_directory,
-        raw_or_processed="raw",
-        testing=testing,
-    )
-
-    # TODO
-    # odor_sequence_to_nwb(
-    #     data_directory=data_directory,
-    #     subject_id=subject_id,
-    #     session_id=session_id,
-    #     nwb_directory=nwb_directory,
-    #     raw_or_processed="processed",
-    #     testing=testing,
-    # )
+    for raw_or_processed in ["raw", "processed"]:
+        odor_sequence_to_nwb(
+            data_directory=data_directory,
+            subject_id=subject_id,
+            session_id=session_id,
+            nwb_directory=nwb_directory,
+            raw_or_processed=raw_or_processed,
+            testing=testing,
+        )
 
     nwb2bids.convert_nwb_dataset(
         nwb_directory=nwb_directory,
