@@ -1,4 +1,4 @@
-"""Main code definition for the conversion of a full session (including NeuroPAL)."""
+"""Main code definition for the conversion of a particular session type (raw or processed) to NWB."""
 
 import typing
 
@@ -10,7 +10,7 @@ import neuroconv.converters
 import pynwb
 import pynwb.testing.mock.file
 
-from .interfaces import OdorIntervalsInterface
+from .interfaces import OdorIntervalsInterface, SpikeSortedInterface
 from ..utils import enhance_metadata
 
 
@@ -28,7 +28,8 @@ def odor_sequence_to_nwb(
     raw_data_directory = data_directory / "raw" / subject_id / f"{subject_id}-{session_id}_g0"
     preprocessed_data_directory = data_directory / "preprocessed" / subject_id / f"{subject_id}-{session_id}"
 
-    filename = f"sub-{subject_id}_ses-{session_id}_desc-{raw_or_processed}_ecephys+behavior.nwb"
+    modalities = "ecephys" if raw_or_processed == "raw" else "ecephys+behavior"
+    filename = f"sub-{subject_id}_ses-{session_id}_desc-{raw_or_processed}_{modalities}.nwb"
     nwbfile_path = nwb_directory.parent / "nwb" / f"sub-{subject_id}" / f"ses-{session_id}" / filename
     nwbfile_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -50,15 +51,23 @@ def odor_sequence_to_nwb(
                 "nidq": {"stub_test": testing},
             }
             nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
+        case "processed":
+            spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
+
+            metadata = spikeglx_converter.get_metadata()
+            enhance_metadata(
+                metadata=metadata,
+                preprocessed_data_directory=preprocessed_data_directory,
+                spikeglx_converter=spikeglx_converter,
+            )
+
+            metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"]
 
             odor_interface = OdorIntervalsInterface(preprocessed_data_directory=preprocessed_data_directory)
-            odor_interface.add_to_nwbfile(nwbfile=nwbfile)
-        case "processed":
-            if metadata["NWBFile"].get("session_start_time", None) is None:
-                spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
-                spikeglx_metadata = spikeglx_converter.get_metadata()
+            nwbfile = odor_interface.create_nwbfile(metadata=metadata)
 
-                metadata["NWBFile"]["session_start_time"] = spikeglx_metadata["NWBFile"]["session_start_time"]
+            spike_sorted_interface = SpikeSortedInterface(preprocessed_data_directory=preprocessed_data_directory)
+            spike_sorted_interface.add_to_nwbfile(nwbfile=nwbfile)
 
     if nwbfile is None:
         message = "Something went wrong while creating the NWB file."

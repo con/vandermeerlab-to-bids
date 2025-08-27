@@ -28,6 +28,21 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
 
         Designed to be consistent with existing NWB datasets involving odor stimuli, such as Dandiset 001170.
         """
+        # Olfactometer device (just for metadata)
+        olfactometer_description = (
+            "The olfactometer consists of different vials attached to a pressurized air system. "
+            "Each vial contains a different odorant, which is mixed with mineral oil. "
+            "Earlier sessions used USP-specification level M1180 mineral oil from Sigma-Aldrich "
+            "(CAS: 8042-47-5; EC: 232-455-8; MDL: MFCD00131611; UNSPSC: 12181504; NACRES: NA.25). "
+            "Later sessions used laboratory-grade 'heavy' mineral oil by ALDON Innovating Science "
+            "(Item #: IS22096; ASIN: B0787CJJBJ). "
+            "When a specific odor is being presented, air is passed through the vial containing that odorant. "
+            "When the odor is not being presented, the vial with the pure mineral oil has air passing through "
+            "it to cause washout of the previously delivered odor from the system."
+        )
+        device = pynwb.device.Device(name="Olfactometer", description=olfactometer_description)
+        nwbfile.add_device(devices=device)
+
         # Odor sequences (trials)
         odor_ids = self._get_odor_ids()
 
@@ -46,7 +61,7 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
         for odor_id in odor_ids:
             if odor_id == "neutral":
                 odorant_id_to_concentration[odor_id] = numpy.nan
-                odorant_id_to_chemical[odor_id] = "neutral"  # TODO: improve
+                odorant_id_to_chemical[odor_id] = "mineral oil"
                 continue
 
             odorant_key = f"odor{odor_id}"
@@ -98,7 +113,8 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
             name="epochs",
             description=(
                 "Each block in this experiment involves a repetition of a subset of odor IDs, "
-                "though the order of presentation may be randomized."
+                "though the order of presentation may be randomized. 'UE' indicates the randomized "
+                "'unpredictable environment' while 'SE' indicates the deterministic 'structured environment'."
             ),
         )
         blocks.add_column(name="block_id", description="The block ID that was presented during this epoch.")

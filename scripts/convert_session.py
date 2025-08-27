@@ -1,4 +1,4 @@
-"""Main conversion script for a single session of raw ephys data."""
+"""Main conversion script for a single session."""
 
 import pathlib
 
