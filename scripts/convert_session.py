@@ -1,4 +1,4 @@
-"""Main conversion script for a single session of raw ephys data."""
+"""Main conversion script for a single session."""
 
 import pathlib
 
@@ -18,8 +18,8 @@ SUBJECT_ID = "M541"
 SESSION_ID = "2024-08-31"
 
 
-DANDISET_DIRECTORY = DATA_DIRECTORY.parent / "bids" / "001470"
-DANDISET_DIRECTORY.mkdir(exist_ok=True)
+BIDS_DIRECTORY = DATA_DIRECTORY.parent / "bids"
+BIDS_DIRECTORY.mkdir(exist_ok=True)
 
 
 if __name__ == "__main__":
@@ -27,6 +27,6 @@ if __name__ == "__main__":
         data_directory=DATA_DIRECTORY,
         subject_id=SUBJECT_ID,
         session_id=SESSION_ID,
-        bids_directory=DANDISET_DIRECTORY,
+        bids_directory=BIDS_DIRECTORY,
         testing=TESTING,
     )

@@ -32,9 +32,10 @@ classifiers = [
 ]
 
 dependencies = [
-    "neuroconv[spikeglx]",
+    "neuroconv[spikeglx] >= 0.8.0",
     "click",
     "nwb2bids",
+    "pymatreader",
 ]
 
 [project.optional-dependencies]
