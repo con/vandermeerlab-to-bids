@@ -20,7 +20,8 @@ def odor_sequence_to_bids(
     nwb_directory = bids_directory.parent / "nwb"
     nwb_directory.mkdir(exist_ok=True)
 
-    for raw_or_processed in ["raw", "processed"]:
+    # for raw_or_processed in ["raw", "processed"]:  # TODO: once nwb2bids support multiple NWB files per session
+    for raw_or_processed in ["both"]:
         odor_sequence_to_nwb(
             data_directory=data_directory,
             subject_id=subject_id,
@@ -31,6 +32,6 @@ def odor_sequence_to_bids(
         )
 
     nwb2bids.convert_nwb_dataset(
-        nwb_directory=nwb_directory,
+        nwb_paths=[nwb_directory],
         bids_directory=bids_directory,
     )

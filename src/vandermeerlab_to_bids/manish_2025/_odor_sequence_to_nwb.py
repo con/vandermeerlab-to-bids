@@ -21,7 +21,7 @@ def odor_sequence_to_nwb(
     subject_id: str,
     session_id: str,
     nwb_directory: pydantic.DirectoryPath,
-    raw_or_processed: typing.Literal["raw", "processed"],
+    raw_or_processed: typing.Literal["raw", "processed", "both"],
     testing: bool = False,
 ) -> None:
     """Convert a single session of OdorSequence data to NWB."""
@@ -61,10 +61,30 @@ def odor_sequence_to_nwb(
                 spikeglx_converter=spikeglx_converter,
             )
 
-            metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"]
-
             odor_interface = OdorIntervalsInterface(preprocessed_data_directory=preprocessed_data_directory)
             nwbfile = odor_interface.create_nwbfile(metadata=metadata)
+
+            spike_sorted_interface = SpikeSortedInterface(preprocessed_data_directory=preprocessed_data_directory)
+            spike_sorted_interface.add_to_nwbfile(nwbfile=nwbfile)
+        case "both":  # TODO: once nwb2bids supports multiple NWB files per session, remove this option
+            spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
+
+            metadata = spikeglx_converter.get_metadata()
+            enhance_metadata(
+                metadata=metadata,
+                preprocessed_data_directory=preprocessed_data_directory,
+                spikeglx_converter=spikeglx_converter,
+            )
+
+            conversion_options = {
+                "imec0.ap": {"stub_test": testing},
+                "imec1.ap": {"stub_test": testing},
+                "nidq": {"stub_test": testing},
+            }
+            nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
+
+            odor_interface = OdorIntervalsInterface(preprocessed_data_directory=preprocessed_data_directory)
+            odor_interface.add_to_nwbfile(nwbfile=nwbfile)
 
             spike_sorted_interface = SpikeSortedInterface(preprocessed_data_directory=preprocessed_data_directory)
             spike_sorted_interface.add_to_nwbfile(nwbfile=nwbfile)
