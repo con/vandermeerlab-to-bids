@@ -17,6 +17,13 @@ class SpikeSortedInterface(
     def get_metadata(self) -> dict:
         metadata = super().get_metadata()
 
-        # TODO: add custom column descriptions
+        metadata["Ecephys"]["UnitProperties"] = [
+            {
+                "name": "relative_depth",
+                "description": "The depth (in microns) of the unit relative to the insertion point.",
+            },
+            {"name": "shank_id", "description": "The shank the unit was detected on."},
+            {"name": "channel_id", "description": "The identifier of the closest channel to the unit."},
+        ]
 
         return metadata

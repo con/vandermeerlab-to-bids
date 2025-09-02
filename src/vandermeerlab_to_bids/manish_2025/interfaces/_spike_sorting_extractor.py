@@ -29,7 +29,7 @@ class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
         ]
         total_number_of_units = sum(number_of_units_per_probe)
 
-        number_of_units_cumulative = numpy.cumsum(number_of_units_per_probe)
+        number_of_units_cumulative = numpy.cumsum([0] + number_of_units_per_probe)
         unit_ids = numpy.empty(shape=total_number_of_units, dtype="U9")
         depths = numpy.empty(shape=total_number_of_units, dtype="float64")
         shank_ids = numpy.empty(shape=total_number_of_units, dtype="uint8")

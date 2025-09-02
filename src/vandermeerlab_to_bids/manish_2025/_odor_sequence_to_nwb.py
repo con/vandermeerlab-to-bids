@@ -87,7 +87,9 @@ def odor_sequence_to_nwb(
             odor_interface.add_to_nwbfile(nwbfile=nwbfile)
 
             spike_sorted_interface = SpikeSortedInterface(preprocessed_data_directory=preprocessed_data_directory)
-            spike_sorted_interface.add_to_nwbfile(nwbfile=nwbfile)
+            spike_sorted_interface.add_to_nwbfile(
+                nwbfile=nwbfile, units_description="Curated spike sorting data across all probes."
+            )
 
     if nwbfile is None:
         message = "Something went wrong while creating the NWB file."
