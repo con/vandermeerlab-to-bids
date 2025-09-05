@@ -22,7 +22,7 @@ def _vandermeerlab_to_bids_convert_cli():
 # vandermeerlab2bids convert nwb
 @_vandermeerlab_to_bids_convert_cli.command(name="nwb")
 @click.option(
-    "--datapath", type=click.Path(writable=True), help="Path to the directory containing all the data the experiment."
+    "--datapath", type=click.Path(writable=False), help="Path to the directory containing all the data the experiment."
 )
 @click.option(
     "--outpath",
@@ -55,7 +55,7 @@ def _vandermeerlab_to_bids_convert_cli():
     default=False,
 )
 def _vandermeerlab_to_bids_convert_nwb_cli(
-    data_directory: str,
+    datapath: str,
     outpath: str,
     experiment: typing.Literal["OdorSequence"],
     subject: str,
@@ -63,16 +63,16 @@ def _vandermeerlab_to_bids_convert_nwb_cli(
     testing: bool = False,
 ) -> None:
     """Convert the given experiment type to NWB format."""
-    data_directory = pathlib.Path(data_directory)
+    datapath = pathlib.Path(datapath)
     outpath = pathlib.Path(outpath)
 
     match experiment:
         case "OdorSequence":
             odor_sequence_to_nwb(
-                data_directory=data_directory,
+                data_directory=datapath,
+                nwb_directory=outpath,
                 subject_id=subject,
                 session_id=session,
-                nwb_directory=outpath,
                 testing=testing,
                 raw_or_processed="both",
             )

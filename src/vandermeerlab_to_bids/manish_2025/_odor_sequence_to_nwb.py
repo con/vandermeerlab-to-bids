@@ -54,7 +54,7 @@ def odor_sequence_to_nwb(
 
     modalities = "ecephys" if raw_or_processed == "raw" else "ecephys+behavior"
     filename = f"sub-{subject_id}_ses-{session_id}_desc-{raw_or_processed}_{modalities}.nwb"
-    nwbfile_path = nwb_directory.parent / "nwb" / f"sub-{subject_id}" / f"ses-{session_id}" / filename
+    nwbfile_path = nwb_directory / f"sub-{subject_id}" / f"ses-{session_id}" / filename
     nwbfile_path.parent.mkdir(parents=True, exist_ok=True)
 
     nwbfile = None
