@@ -66,8 +66,7 @@ class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
 
 class VanDerMeerSortingSegment(spikeinterface.BaseSortingSegment):
     def __init__(self, sampling_frequency: float, spike_times_by_unit_id: Dict[int, np.ndarray]):
-        super().__init__(self)
-        self._t_start = 0.0
+        super().__init__()
         self._sampling_frequency: float = sampling_frequency
         self._spike_times_by_unit_id: dict[int, np.ndarray] = spike_times_by_unit_id
 
