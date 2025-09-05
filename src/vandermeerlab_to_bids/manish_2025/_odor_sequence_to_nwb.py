@@ -24,7 +24,31 @@ def odor_sequence_to_nwb(
     raw_or_processed: typing.Literal["raw", "processed", "both"],
     testing: bool = False,
 ) -> None:
-    """Convert a single session of OdorSequence data to NWB."""
+    """
+    Convert a single session of OdorSequence data to NWB.
+
+    Expected to be structured similar to...
+
+    |- OdorSequence
+    |--- sourcedata
+    |----- preprocessed
+    |------- < subject ID >
+    |--------- < subject ID >-< session ID >
+    |----- raw
+    |------- < subject ID >
+    |--------- < subject ID >-< session ID >_< SpikeGLX gate >
+
+    For example...
+
+    |- OdorSequence
+    |--- sourcedata
+    |----- preprocessed
+    |------- M541
+    |--------- M541-2024-08-31
+    |----- raw
+    |------- M541
+    |--------- M541-2024-08-31_g0
+    """
     raw_data_directory = data_directory / "raw" / subject_id / f"{subject_id}-{session_id}_g0"
     preprocessed_data_directory = data_directory / "preprocessed" / subject_id / f"{subject_id}-{session_id}"
 

@@ -49,7 +49,7 @@ dandi = [
 ]
 
 [project.scripts]
-vandermeerlab2bids = "vandermeerlab_to_bids._command_line_interface:_cli"
+vandermeerlab2bids = "vandermeerlab_to_bids._command_line_interface._cli:_vandermeerlab_to_bids_cli"
 
 [project.urls]
 "Homepage" = "https://github.com/con/vandermeerlab-to-bids"
