@@ -2,7 +2,9 @@ name: Build and upload Docker image of dev branch to GHCR
 
 on:
   workflow_dispatch:
-  workflow_call:
+  workflow_run:
+    workflows: [Upload Package to PyPI]
+    types: [completed]
 
 jobs:
   release-image:
