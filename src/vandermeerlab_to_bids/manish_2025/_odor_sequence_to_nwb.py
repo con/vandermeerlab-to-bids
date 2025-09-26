@@ -7,8 +7,6 @@ import warnings
 
 import hdmf.build.warnings
 import neuroconv.converters
-import pynwb
-import pynwb.testing.mock.file
 
 from .interfaces import OdorIntervalsInterface, SpikeSortedInterface
 from ..utils import enhance_metadata
@@ -132,5 +130,3 @@ def odor_sequence_to_nwb(
     neuroconv.tools.nwb_helpers.configure_and_write_nwbfile(
         nwbfile=nwbfile, nwbfile_path=nwbfile_path, backend_configuration=backend_configuration
     )
-    with pynwb.NWBHDF5IO(path=nwbfile_path, mode="w") as file_stream:
-        file_stream.write(nwbfile)
