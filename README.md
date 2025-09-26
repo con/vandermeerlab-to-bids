@@ -54,6 +54,11 @@ datalad containers-run \
   --subject M541 \
   --session 2024-08-31 \
   --testing"
+```
+
+You can drop the `--testing` flag when doing this for real. Then
+
+```
 datalad save --message "save NWB conversion"
 cd ../bids-raw
 datalad install --reckless=ephemeral -s ../nwb-raw sourcedata/nwb-raw
