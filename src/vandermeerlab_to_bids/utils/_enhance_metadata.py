@@ -22,7 +22,7 @@ def enhance_metadata(
     experiment_keys = read_experiment_keys_file(file_path=experiment_keys_file_path)
 
     metadata["NWBFile"]["session_id"] = session_id
-    metadata["NWBFile"]["session_description"] = " | ".join(experiment_keys["sessiontype"])
+    metadata["NWBFile"]["session_description"] = " | ".join(experiment_keys.get("sessiontype", []))
 
     experimenter_name = experiment_keys["experimenter"]
     if experimenter_name != "Manish":
@@ -58,14 +58,9 @@ def enhance_metadata(
 
     latin_species = latin_species_map[species]
 
-    sex = experiment_keys["sex"]
-    if sex not in ["U", "O", "M", "F"]:
-        message = f"Invalid sex value '{sex}'. Expected one of 'U', 'O', 'M', or 'F'."
-        raise ValueError(message)
-
     metadata["Subject"]["subject_id"] = experiment_keys["subject"]
     metadata["Subject"]["species"] = latin_species
-    metadata["Subject"]["sex"] = sex
+    metadata["Subject"]["sex"] = experiment_keys["sex"]
     metadata["Subject"]["strain"] = experiment_keys["genetics"]
 
     probe_to_location = dict()

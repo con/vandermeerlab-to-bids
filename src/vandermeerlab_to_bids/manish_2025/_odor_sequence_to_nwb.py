@@ -126,5 +126,11 @@ def odor_sequence_to_nwb(
         category=hdmf.build.warnings.DtypeConversionWarning,
     )
 
+    backend_configuration = neuroconv.tools.nwb_helpers.get_default_backend_configuration(
+        nwbfile=nwbfile, backend="hdf5"
+    )
+    neuroconv.tools.nwb_helpers.configure_and_write_nwbfile(
+        nwbfile=nwbfile, nwbfile_path=nwbfile_path, backend_configuration=backend_configuration
+    )
     with pynwb.NWBHDF5IO(path=nwbfile_path, mode="w") as file_stream:
         file_stream.write(nwbfile)
