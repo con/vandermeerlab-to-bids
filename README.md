@@ -33,6 +33,8 @@ vandermeer2bids odorseq \
 
 To run these tools through these pipelines, you only need an environment with `datalad`, `datalad-containers`, `singularity`, and likely `git-annex` installed.
 
+Start by running:
+
 ```bash
 datalad install -r -s smaug:/mnt/datasets/datalad/crawl/labs/mvdm/OdorSequence
 cd OdorSequence
@@ -52,16 +54,27 @@ datalad containers-run \
   --outpath ./sourcedata/nwb-raw/ \
   --experiment OdorSequence \
   --subject M541 \
-  --session 2024-08-31 \
-  --testing"
+  --session 2024-08-31"
 ```
 
-You can drop the `--testing` flag when doing this for real. Then
+> [!NOTE]
+> This process will take some time.
+> On average, about 25 MB/s (compression is the slowest part).
+> To test it out quickly, you can add the `--testing` flag, which will reduce the amount of data written.
+
+Once it is done creating the NWB file, organize it according to the BIDS standard by calling:
 
 ```
-datalad save --message "save NWB conversion"
-cd ../bids-raw
-datalad install --reckless=ephemeral -s ../nwb-raw sourcedata/nwb-raw
-datalad container-run nwb2bids ./nwb_raw --bids-directory
-datalad save --message "save BIDS conversion"
+datalad containers-run --container-name nwb2bids "nwb2bids convert ./sourcedata/nwb-raw \
+  --bids-directory ./sourcedata/nwb-bids"
 ```
+
+If you are tight on disk space and need to remove any files, you can do so with:
+
+```bash
+datalad drop ./sourcedata/raw/[subject ID]/[session ID]
+datalad drop ./sourcedata/preprocesed/[subject ID]/[session ID]
+datalad drop ./sourcedata/nwb-raw
+```
+
+If you were even tighter on disk space during this process, you could have dropped the `sourcedata/raw` after first creating the full NWB file.
