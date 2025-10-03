@@ -9,21 +9,23 @@ Conversion tools for ingesting data from the van der Meer group at Dartmouth Col
 ### CLI
 
 ```bash
-vandermeer2bids odorseq \
-  --data-directory <source data directory> \
-  --subject-id <subject ID> \
-  --session-id <session ID> \
-  --dandiset-directory <dandiset directory>
+vandermeerlab2bids convert nwb
+  --datapath [source data directory] \
+  --outpath [dandiset directory]
+  --experiment [experiment name] \
+  --subject-id [subject ID] \
+  --session-id [session ID] \
 ```
 
 For example:
 
 ```bash
-vandermeer2bids odorseq \
-  --data-directory E:/bids_32_examples/mvdm/OdorSequence/sourcedata \
+vandermeerlab2bids convert nwb \
+  --datapath E:/vandermeerlab/mvdm/OdorSequence/sourcedata \
+  --outpath E:/vandermeerlab/mvdm/OdorSequence/nwb \
+  --experiment OdorSequence \
   --subject-id M541 \
   --session-id M541-2024-08-31 \
-  --dandiset-directory
 ```
 
 
@@ -39,7 +41,8 @@ Start by running:
 datalad install -r -s smaug:/mnt/datasets/datalad/crawl/labs/mvdm/OdorSequence
 cd OdorSequence
 datalad get *
-# On Windows might need
+
+# On Windows, you might need
 # git config --global core.whitespace cr-at-eol
 # datalad get sourcedata/preprocessed
 # datalad get sourcedata/raw
@@ -65,7 +68,9 @@ datalad containers-run \
 Once it is done creating the NWB file, organize it according to the BIDS standard by calling:
 
 ```
-datalad containers-run --container-name nwb2bids "nwb2bids convert ./sourcedata/nwb-raw \
+datalad containers-run
+  --container-name nwb2bids \
+  "nwb2bids convert ./sourcedata/nwb-raw \
   --bids-directory ./sourcedata/nwb-bids"
 ```
 
