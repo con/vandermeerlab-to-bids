@@ -38,7 +38,7 @@ To run these tools through these pipelines, you only need an environment with `d
 Start by running:
 
 ```bash
-datalad install -r -s smaug:/mnt/datasets/datalad/crawl/labs/mvdm/OdorSequence
+datalad install -r -s smaug:/mnt/datasets/datalad/incoming/mvdm/OdorSequence
 cd OdorSequence
 datalad get *
 
