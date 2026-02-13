@@ -77,7 +77,7 @@ class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
         self.set_property(key="shank_id", values=shank_ids)
 
         warnings.filterwarnings(
-            action="ignore", message="Column 'waveform_mean' is predefined*", type=UserWarning, module="neuroconv"
+            action="ignore", message="Column 'waveform_mean' is predefined*", category=UserWarning, module="neuroconv"
         )
         warnings.filterwarnings(action="ignore", message="Shape of data does not match*", module="hdmf")
         self.set_property(key="waveform_mean", values=waveform_means)
