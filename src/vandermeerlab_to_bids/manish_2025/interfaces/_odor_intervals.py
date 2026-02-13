@@ -73,8 +73,13 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
             else:
                 odorant_split = odorant_details.split(" ")
 
-                concentration = float(odorant_split[0].removesuffix("%")) / 100
-                chemical = " ".join(odorant_split[1:])
+                match odorant_split[0]:
+                    case "2-Heptanone":
+                        concentration = numpy.nan
+                        chemical = odorant_details
+                    case _:
+                        concentration = float(odorant_split[0].removesuffix("%")) / 100
+                        chemical = " ".join(odorant_split[1:])
 
             odorant_id_to_concentration[odor_id] = concentration
             odorant_id_to_chemical[odor_id] = chemical
