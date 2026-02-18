@@ -22,7 +22,9 @@ def _vandermeerlab_to_bids_convert_cli():
 # vandermeerlab2bids convert nwb
 @_vandermeerlab_to_bids_convert_cli.command(name="nwb")
 @click.option(
-    "--datapath", type=click.Path(writable=False), help="Path to the directory containing all the data the experiment."
+    "--datapath",
+    type=click.Path(writable=False),
+    help="Path to the directory containing all of the data from the experiment.",
 )
 @click.option(
     "--outpath",
@@ -38,14 +40,16 @@ def _vandermeerlab_to_bids_convert_cli():
 @click.option(
     "--subject",
     help="ID of the subject.",
-    required=True,
-    type=str,
+    required=False,
+    type=str | None,
+    default=None,
 )
 @click.option(
     "--session",
     help="ID of the subject.",
-    required=True,
-    type=str,
+    required=False,
+    type=str | None,
+    default=None,
 )
 @click.option(
     "--testing",
@@ -58,8 +62,8 @@ def _vandermeerlab_to_bids_convert_nwb_cli(
     datapath: str,
     outpath: str,
     experiment: typing.Literal["OdorSequence"],
-    subject: str,
-    session: str,
+    subject: str | None = None,
+    session: str | None = None,
     testing: bool = False,
 ) -> None:
     """Convert the given experiment type to NWB format."""
@@ -76,6 +80,3 @@ def _vandermeerlab_to_bids_convert_nwb_cli(
                 testing=testing,
                 raw_or_processed="both",
             )
-        case _:
-            message = f"Experiment type '{experiment}' is not yet supported."
-            raise NotImplementedError(message)
