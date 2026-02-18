@@ -4,7 +4,7 @@ import pathlib
 
 import vandermeerlab_to_bids.manish_2025
 
-DATA_DIRECTORY = pathlib.Path("E:/") / "mvdm" / "all_processed"
+DATA_DIRECTORY = pathlib.Path("G:/") / "mvdm" / "Task2_SWR"
 
 OUTPUT_DIRECTORY = pathlib.Path("E:/") / "mvdm" / "001470"
 OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
