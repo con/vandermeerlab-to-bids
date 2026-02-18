@@ -10,7 +10,7 @@ packages = ["src/vandermeerlab_to_bids"]
 
 [project]
 name = "vandermeerlab_to_bids"
-version="0.2.0"
+version="1.0.0"
 authors = [
   { name="Cody Baker", email="cody.c.baker.phd@gmail.com" },
 ]
@@ -37,16 +37,6 @@ dependencies = [
     "nwb2bids",
     "pymatreader",
     "tqdm",
-]
-
-[project.optional-dependencies]
-# TODO: add exact pins or otherwise freeze environment somehow
-randi_nature_2023 = [
-    "neuroconv[spikeglx]",
-]
-
-dandi = [
-    "dandi",
 ]
 
 [project.scripts]
