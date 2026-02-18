@@ -36,7 +36,6 @@ dependencies = [
     "click",
     "nwb2bids",
     "pymatreader",
-    "duct",
     "dandi",
 ]
 
