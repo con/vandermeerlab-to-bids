@@ -49,7 +49,7 @@ def odor_sequence_to_nwb(
         progress_bar_options = {"position": 1, "leave": False}
         conversion_options = {
             "stub_test": testing,
-            "iterator_opts": {"display_progress": True, "progress_bar_options": progress_bar_options},
+            "iterator_options": {"display_progress": True, "progress_bar_options": progress_bar_options},
         }
         nwbfile = None
         match raw_or_processed:
