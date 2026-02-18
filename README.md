@@ -36,9 +36,7 @@ To run these tools through these pipelines, you only need an environment with `d
 Start by running:
 
 ```bash
-datalad install -r -s smaug:/mnt/datasets/datalad/incoming/mvdm/OdorSequence
-cd OdorSequence
-datalad get *
+datalad create
 
 # On Windows, you might need
 # git config --global core.whitespace cr-at-eol
