@@ -2,7 +2,17 @@ name: Build and upload Docker image of dev branch to GHCR
 
 on:
   workflow_dispatch:
+    inputs:
+      additional_tags:
+        description: 'Additional tags to apply to the image (comma-separated, e.g., "latest,v1.0.0")'
+        required: false
+        type: string
   workflow_call:
+    inputs:
+      additional_tags:
+        description: 'Additional tags to apply to the image (comma-separated, e.g., "latest,v1.0.0")'
+        required: false
+        type: string
 
 jobs:
   release-image:
@@ -23,11 +33,25 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare tags
+        id: prepare_tags
+        run: |
+          TAGS="ghcr.io/con/vandermeerlab-to-bids:dev"
+          if [ -n "${{ inputs.additional_tags }}" ]; then
+            IFS=',' read -ra ADDR <<< "${{ inputs.additional_tags }}"
+            for tag in "${ADDR[@]}"; do
+              tag=$(echo "$tag" | xargs)  # Trim whitespace
+              TAGS="$TAGS,ghcr.io/con/vandermeerlab-to-bids:$tag"
+            done
+          fi
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true  # Push is a shorthand for --output=type=registry
-          tags: ghcr.io/con/vandermeerlab-to-bids:dev
+          tags: ${{ steps.prepare_tags.outputs.tags }}
           context: .
           file: dockerfiles/dev
           provenance: false
