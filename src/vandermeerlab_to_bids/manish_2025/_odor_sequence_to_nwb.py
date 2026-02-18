@@ -39,12 +39,17 @@ def odor_sequence_to_nwb(
         ]
 
     for subject_id, session_id in tqdm.tqdm(
-        iterable=subject_and_session_ids, desc="Converting session(s)", unit="sessions"
+        iterable=subject_and_session_ids, desc="Converting session(s)", unit="sessions", position=0, leave=True
     ):
         raw_data_directory = data_directory / subject_id / "rawdata" / f"{subject_id}-{session_id}_g0"
         preprocessed_data_directory = data_directory / subject_id / "preprocessed" / f"{subject_id}-{session_id}"
         filename = f"sub-{subject_id}_ses-{session_id}_ecephys.nwb"
 
+        progress_bar_options = {"position": 1, "leave": False}
+        conversion_options = {
+            "stub_test": testing,
+            "iterator_opts": {"display_progress": True, "progress_bar_options": progress_bar_options},
+        }
         nwbfile = None
         match raw_or_processed:
             case "raw":
@@ -68,9 +73,9 @@ def odor_sequence_to_nwb(
                 )
 
                 conversion_options = {
-                    "imec0.ap": {"stub_test": testing, "iterator_opts": {"display_progress": True}},
-                    "imec1.ap": {"stub_test": testing, "iterator_opts": {"display_progress": True}},
-                    "nidq": {"stub_test": testing, "iterator_opts": {"display_progress": True}},
+                    "imec0.ap": conversion_options,
+                    "imec1.ap": conversion_options,
+                    "nidq": conversion_options,
                 }
                 nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
             case "processed":
