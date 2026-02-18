@@ -51,7 +51,23 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
             description="The on/off timing of presented odors IDs.",
         )
         odor_sequences.add_column(name="odorant_id", description="The odorant ID that was presented during this trial.")
-        odor_sequences.add_column(name="odorant", description="The chemical description of the odorant.")
+        odor_sequences.add_column(
+            name="odorant",
+            description=(
+                "The chemical description of the odorant. "
+                "According to one human (co-experimenter Kyoko Leaman) who smelled each substance smells like...\n"
+                "Cinnamaldehyde: cinnamon\n"
+                "Ethyl butyrate: pineapple, or similar to 2-Heptanone\n"
+                "1-octanol: waxy\n"
+                "Isobutyric acid: sour butter\n"
+                "Benzaldehyde: bitter, like almond\n"
+                "alpha-pinene: pine\n"
+                "Isovaleric acid: stink or cheesy\n"
+                "2-Heptanone: banana, or similar to Ethyl butyrate\n"
+                "Propyl acetate: plum\n"
+                "4-Methylvaleric acid: stinky"
+            ),
+        )
         odor_sequences.add_column(
             name="concentration", description="The concentration (in percent per volume) of the odorant."
         )
