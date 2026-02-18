@@ -23,13 +23,6 @@ OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":
-    # vandermeerlab_to_bids.manish_2025.odor_sequence_to_bids(
-    #     data_directory=DATA_DIRECTORY,
-    #     subject_id=SUBJECT_ID,
-    #     session_id=SESSION_ID,
-    #     bids_directory=BIDS_DIRECTORY,
-    #     testing=TESTING,
-    # )
     vandermeerlab_to_bids.manish_2025.odor_sequence_to_nwb(
         data_directory=DATA_DIRECTORY,
         subject_id=SUBJECT_ID,
