@@ -38,6 +38,11 @@ def _vandermeerlab_to_bids_convert_cli():
     help="The specifier of the experiment to convert (e.g., 'OdorSequence').",
 )
 @click.option(
+    "--stream",
+    type=click.Choice(["raw", "processed"], case_sensitive=False),
+    help="The specifier of the data streams to convert (e.g., 'raw' or 'processed').",
+)
+@click.option(
     "--subject",
     help="ID of the subject.",
     required=False,
@@ -62,6 +67,7 @@ def _vandermeerlab_to_bids_convert_nwb_cli(
     datapath: str,
     outpath: str,
     experiment: typing.Literal["OdorSequence"],
+    stream: typing.Literal["raw", "processed"],
     subject: str | None = None,
     session: str | None = None,
     testing: bool = False,
@@ -78,5 +84,5 @@ def _vandermeerlab_to_bids_convert_nwb_cli(
                 subject_id=subject,
                 session_id=session,
                 testing=testing,
-                raw_or_processed="both",
+                raw_or_processed=stream,
             )
