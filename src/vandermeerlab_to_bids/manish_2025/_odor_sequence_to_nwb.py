@@ -75,7 +75,7 @@ def odor_sequence_to_nwb(
                 conversion_options = {
                     "imec0.ap": conversion_options,
                     "imec1.ap": conversion_options,
-                    "nidq": conversion_options
+                    "nidq": conversion_options,
                 }
                 nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
             case "processed":
