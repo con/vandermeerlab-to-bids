@@ -36,6 +36,7 @@ dependencies = [
     "click",
     "nwb2bids",
     "pymatreader",
+    "tqdm",
 ]
 
 [project.optional-dependencies]
