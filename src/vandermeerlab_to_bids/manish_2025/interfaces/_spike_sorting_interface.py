@@ -8,8 +8,6 @@ class SpikeSortedInterface(
 ):
     """Interface for handling spike sorted in the Manish 2025 OdorSequence dataset."""
 
-    Extractor = VanDerMeerSortingExtractor
-
     @pydantic.validate_call
     def __init__(self, preprocessed_data_directory: pydantic.DirectoryPath) -> None:
         super().__init__(preprocessed_data_directory=preprocessed_data_directory)
@@ -27,3 +25,7 @@ class SpikeSortedInterface(
         ]
 
         return metadata
+
+    @classmethod
+    def get_extractor_class(cls):
+        return VanDerMeerSortingExtractor

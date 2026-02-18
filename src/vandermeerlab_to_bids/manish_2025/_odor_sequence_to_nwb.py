@@ -1,5 +1,6 @@
 """Main code definition for the conversion of a particular session type (raw or processed) to NWB."""
 
+import pathlib
 import typing
 
 import pydantic
@@ -16,10 +17,10 @@ from ..utils import enhance_metadata
 @pydantic.validate_call
 def odor_sequence_to_nwb(
     *,
-    data_directory: pydantic.DirectoryPath,
+    data_directory: pathlib.Path,
     subject_id: str | None = None,
     session_id: str | None = None,
-    nwb_directory: pydantic.DirectoryPath,
+    nwb_directory: pathlib.Path,
     raw_or_processed: typing.Literal["raw", "processed"],
     testing: bool = False,
     skip_if_exists: bool = True,

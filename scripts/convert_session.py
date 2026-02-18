@@ -18,7 +18,7 @@ SUBJECT_ID = "M540"
 SESSION_ID = "2024-08-16"
 
 
-OUTPUT_DIRECTORY = pathlib.Path("E:/") / "mvdm" / "001470"
+OUTPUT_DIRECTORY = pathlib.Path("D:/") / "mvdm" / "001470"
 OUTPUT_DIRECTORY.mkdir(parents=True, exist_ok=True)
 
 
