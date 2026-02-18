@@ -29,6 +29,7 @@ def enhance_metadata(
     experimenter_name_map = {
         "Manish": "Mahopatra, Manish",
         "Kyoko": "Leaman, Kyoko",
+        "Mimi": "Janssen, Miriam A.",  # Taken to match publication record
     }
 
     experimenter_name = experiment_keys["experimenter"]
@@ -69,8 +70,18 @@ def enhance_metadata(
 
     metadata["Subject"]["subject_id"] = experiment_keys["subject"]
     metadata["Subject"]["species"] = latin_species
-    metadata["Subject"]["sex"] = experiment_keys["sex"] or "U"
     metadata["Subject"]["strain"] = experiment_keys["genetics"]
+
+    subject_sex = experiment_keys["sex"]
+    match subject_sex:
+        case "2024-08-19":  # A clear mistake in the `_keys.m` file for `M540-2024-08-20`
+            metadata["Subject"]["sex"] = "U"
+        case "Male":
+            metadata["Subject"]["sex"] = "M"
+        case "Female":
+            metadata["Subject"]["sex"] = "F"
+        case _:
+            metadata["Subject"]["sex"] = subject_sex
 
     probe_to_location = dict()
     for index in range(1, 3):

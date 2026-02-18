@@ -56,7 +56,9 @@ class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
             unit_ids[start_index:stop_index] = data_per_probe["unit_ids"]
             depths[start_index:stop_index] = data_per_probe["depths"]
             shank_ids[start_index:stop_index] = data_per_probe["shank_ids"].astype("uint8")
-            channel_ids[start_index:stop_index] = data_per_probe.get("channel_ids", [])
+            channel_ids_per_probe = data_per_probe.get("channel_ids", None)
+            if channel_ids_per_probe is not None:
+                channel_ids[start_index:stop_index] = channel_ids_per_probe
 
             for unit_id, spike_train in zip(data_per_probe["unit_ids"], data_per_probe["spike_train"]):
                 spike_times_by_unit_id[unit_id] = spike_train
@@ -84,8 +86,6 @@ class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
 
         if any(channel_ids):
             self.set_property(key="channel_id", values=channel_ids)
-            # self._mean_waveforms = data_per_probe["mean_waveforms"]
-            # Will need to be added directly to the units table through upstream method
 
 
 class VanDerMeerSortingSegment(spikeinterface.BaseSortingSegment):

@@ -60,8 +60,12 @@ def read_experiment_keys_file(file_path: str | pathlib.Path) -> dict[str, str]:
 
     # Wrap all in JSON object (dictionary)
     json_content = f"{{{quote_fixed_content.replace("\n", ", ").replace("{", "[").replace("}", "]").replace("\'", '\"').replace("^", "'")}}}"
+
     # Delete trailing commas
-    proper_json_content = re.sub(pattern=r",\s*}", repl="}", string=json_content)
+    json_content_no_trailing = re.sub(pattern=r",\s*}", repl="}", string=json_content)
+
+    # Convert residual ` =""` patterns to `": ""`
+    proper_json_content = json_content_no_trailing.replace(' =""', '": ""')
 
     experiment_keys = json.loads(s=proper_json_content)
     return experiment_keys

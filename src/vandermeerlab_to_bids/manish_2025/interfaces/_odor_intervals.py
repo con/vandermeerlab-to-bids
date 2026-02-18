@@ -75,7 +75,7 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
 
                 match odorant_split[0]:
                     case "2-Heptanone":
-                        concentration = numpy.nan
+                        concentration = "0.0004"  # From https://github.com/con/vandermeerlab-to-bids/issues/53
                         chemical = odorant_details
                     case _:
                         concentration = float(odorant_split[0].removesuffix("%")) / 100
