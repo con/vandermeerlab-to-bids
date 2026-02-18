@@ -55,7 +55,7 @@ class OdorIntervalsInterface(neuroconv.BaseDataInterface):
             name="odorant",
             description=(
                 "The chemical description of the odorant. "
-                "According to one human (co-experimenter Kyoko Leaman) who smelled each substance smells like...\n"
+                "According to one human (co-experimenter Kyoko Leaman) each substance smells like...\n"
                 "Cinnamaldehyde: cinnamon\n"
                 "Ethyl butyrate: pineapple, or similar to 2-Heptanone\n"
                 "1-octanol: waxy\n"
