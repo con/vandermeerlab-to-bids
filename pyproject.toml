@@ -36,15 +36,7 @@ dependencies = [
     "click",
     "nwb2bids",
     "pymatreader",
-]
-
-[project.optional-dependencies]
-# TODO: add exact pins or otherwise freeze environment somehow
-randi_nature_2023 = [
-    "neuroconv[spikeglx]",
-]
-
-dandi = [
+    "duct",
     "dandi",
 ]
 
