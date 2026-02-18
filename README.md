@@ -29,9 +29,7 @@ vandermeerlab2bids convert nwb \
 ```
 
 
-## YODA-style DataLad Conversion Pipeline
-
-[YODA](https://handbook.datalad.org/en/latest/basics/101-127-yoda.html) is a framework for enabling reproducible computations through version-controlled pipelines.
+## DataLad Conversion Pipeline
 
 To run these tools through these pipelines, you only need an environment with `datalad`, `datalad-containers`, `singularity`, and likely `git-annex` installed.
 
