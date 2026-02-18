@@ -1,21 +1,12 @@
-"""Main conversion script for a single session."""
+"""Debugging script for a single session."""
 
 import pathlib
 
 import vandermeerlab_to_bids.manish_2025
 
-# TESTING=True creates 'preview' files that truncate all major data blocks; useful for ensuring process runs smoothly
-TESTING = True
-
-# TESTING=False performs a full file conversion
-# TESTING = False
-
-
-# Define base folder of source data
-# Change these as needed on new systems
 DATA_DIRECTORY = pathlib.Path("G:/") / "mvdm" / "Task2_SWR"
 SUBJECT_ID = "M540"
-SESSION_ID = "2024-08-16"
+SESSION_ID = "2024-08-19"
 
 
 OUTPUT_DIRECTORY = pathlib.Path("D:/") / "mvdm" / "001470"
@@ -28,6 +19,7 @@ if __name__ == "__main__":
         subject_id=SUBJECT_ID,
         session_id=SESSION_ID,
         nwb_directory=OUTPUT_DIRECTORY,
-        raw_or_processed="processed",
-        testing=TESTING,
+        raw_or_processed="raw",
+        testing=True,
+        skip_if_exists=False,
     )

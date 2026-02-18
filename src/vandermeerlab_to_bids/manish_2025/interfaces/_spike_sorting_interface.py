@@ -29,3 +29,8 @@ class SpikeSortedInterface(
     @classmethod
     def get_extractor_class(cls):
         return VanDerMeerSortingExtractor
+
+    def add_to_nwbfile(self, *args, **kwargs) -> None:
+        super().add_to_nwbfile(
+            *args, **kwargs, units_description="Units identified by spike sorting of the electrophysiology data."
+        )

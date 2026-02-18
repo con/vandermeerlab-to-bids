@@ -1,7 +1,6 @@
 import datetime
 
 import pydantic
-import json
 import dateutil.tz
 import neuroconv.utils.dict
 import neuroconv.converters
@@ -50,12 +49,6 @@ def enhance_metadata(
     metadata["NWBFile"]["session_start_time"] = metadata["NWBFile"]["session_start_time"].replace(
         tzinfo=dateutil.tz.gettz("US/Eastern")
     )
-
-    for probe_index in range(len(metadata["Ecephys"]["Device"])):
-        json_decoded = json.loads(s=metadata["Ecephys"]["Device"][probe_index]["description"])
-        json_decoded["probe_type_description"] = "Neuropixels 2.0 - Four Shank"
-        json_encoded = json.dumps(obj=json_decoded)
-        metadata["Ecephys"]["Device"][probe_index]["description"] = json_encoded
 
     latin_species_map = {
         "mouse": "Mus musculus",
