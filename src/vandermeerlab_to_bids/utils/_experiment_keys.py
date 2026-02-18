@@ -52,12 +52,22 @@ def read_experiment_keys_file(file_path: str | pathlib.Path) -> dict[str, str]:
     # Format spaces after colons
     formatted_content = re.sub(pattern=r":\s+", repl=": ", string=plus_stripped_content)
 
-    # Wrap all in JSON object (dictionary)
-    json_content = (
-        f"{{{formatted_content.replace("\n", ", ").replace("{", "[").replace("}", "]").replace("\'", '\"')}}}"
+    # Replace single quotes with unique character (chose caret) only within double-quoted strings
+    # E.g., for the "notes" field
+    quote_fixed_content = re.sub(
+        pattern=r'"([^"]*)"', repl=lambda m: f'"{m.group(1).replace("'", "^")}"', string=formatted_content
     )
 
-    experiment_keys = json.loads(s=json_content)
+    # Wrap all in JSON object (dictionary)
+    json_content = f"{{{quote_fixed_content.replace("\n", ", ").replace("{", "[").replace("}", "]").replace("\'", '\"').replace("^", "'")}}}"
+
+    # Delete trailing commas
+    json_content_no_trailing = re.sub(pattern=r",\s*}", repl="}", string=json_content)
+
+    # Convert residual ` =""` patterns to `": ""`
+    proper_json_content = json_content_no_trailing.replace(' =""', '": ""')
+
+    experiment_keys = json.loads(s=proper_json_content)
     return experiment_keys
 
 

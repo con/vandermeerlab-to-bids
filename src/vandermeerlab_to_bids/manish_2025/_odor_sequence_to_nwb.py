@@ -19,45 +19,26 @@ def odor_sequence_to_nwb(
     subject_id: str,
     session_id: str,
     nwb_directory: pydantic.DirectoryPath,
-    raw_or_processed: typing.Literal["raw", "processed", "both"],
+    raw_or_processed: typing.Literal["raw", "processed"],
     testing: bool = False,
+    skip_if_exists: bool = True,
 ) -> None:
     """
-    Convert a single session of OdorSequence data to NWB.
-
-    Expected to be structured similar to...
-
-    |- OdorSequence
-    |--- sourcedata
-    |----- preprocessed
-    |------- < subject ID >
-    |--------- < subject ID >-< session ID >
-    |----- raw
-    |------- < subject ID >
-    |--------- < subject ID >-< session ID >_< SpikeGLX gate >
-
-    For example...
-
-    |- OdorSequence
-    |--- sourcedata
-    |----- preprocessed
-    |------- M541
-    |--------- M541-2024-08-31
-    |----- raw
-    |------- M541
-    |--------- M541-2024-08-31_g0
+    Convert a single session of raw or processed OdorSequence data to NWB.
     """
-    raw_data_directory = data_directory / "raw" / subject_id / f"{subject_id}-{session_id}_g0"
-    preprocessed_data_directory = data_directory / "preprocessed" / subject_id / f"{subject_id}-{session_id}"
-
-    modalities = "ecephys" if raw_or_processed == "raw" else "ecephys+behavior"
-    filename = f"sub-{subject_id}_ses-{session_id}_desc-{raw_or_processed}_{modalities}.nwb"
-    nwbfile_path = nwb_directory / f"sub-{subject_id}" / f"ses-{session_id}" / filename
-    nwbfile_path.parent.mkdir(parents=True, exist_ok=True)
+    raw_data_directory = data_directory / subject_id / "rawdata" / f"{subject_id}-{session_id}_g0"
+    preprocessed_data_directory = data_directory / subject_id / "preprocessed" / f"{subject_id}-{session_id}"
+    filename = f"sub-{subject_id}_ses-{session_id}_ecephys.nwb"
 
     nwbfile = None
     match raw_or_processed:
         case "raw":
+            nwbfile_path = (
+                nwb_directory / "sourcedata" / f"sub-{subject_id}" / f"ses-{session_id.replace("-", "+")}" / filename
+            )
+            if skip_if_exists and nwbfile_path.exists():
+                return
+
             spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
 
             metadata = spikeglx_converter.get_metadata()
@@ -68,50 +49,38 @@ def odor_sequence_to_nwb(
             )
 
             conversion_options = {
-                "imec0.ap": {"stub_test": testing},
-                "imec1.ap": {"stub_test": testing},
-                "nidq": {"stub_test": testing},
+                "imec0.ap": {"stub_test": testing, "iterator_opts": {"display_progress": True}},
+                "imec1.ap": {"stub_test": testing, "iterator_opts": {"display_progress": True}},
+                "nidq": {"stub_test": testing, "iterator_opts": {"display_progress": True}},
             }
             nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
         case "processed":
-            spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
+            # spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
+            #
+            # metadata = spikeglx_converter.get_metadata()
+            nwbfile_path = (
+                nwb_directory / "derivatives" / f"sub-{subject_id}" / f"ses-{session_id.replace("-", "+")}" / filename
+            )
+            if skip_if_exists and nwbfile_path.exists():
+                return
 
-            metadata = spikeglx_converter.get_metadata()
+            metadata = neuroconv.utils.DeepDict()
             enhance_metadata(
                 metadata=metadata,
                 preprocessed_data_directory=preprocessed_data_directory,
-                spikeglx_converter=spikeglx_converter,
+                # spikeglx_converter=spikeglx_converter,
             )
 
             odor_interface = OdorIntervalsInterface(preprocessed_data_directory=preprocessed_data_directory)
-            nwbfile = odor_interface.create_nwbfile(metadata=metadata)
+
+            try:
+                nwbfile = odor_interface.create_nwbfile(metadata=metadata)
+            except Exception as e:
+                message = f"Something went wrong while creating the NWB file from the odor interface: {e}"
+                raise ValueError(message)
 
             spike_sorted_interface = SpikeSortedInterface(preprocessed_data_directory=preprocessed_data_directory)
             spike_sorted_interface.add_to_nwbfile(nwbfile=nwbfile)
-        case "both":  # TODO: once nwb2bids supports multiple NWB files per session, remove this option
-            spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
-
-            metadata = spikeglx_converter.get_metadata()
-            enhance_metadata(
-                metadata=metadata,
-                preprocessed_data_directory=preprocessed_data_directory,
-                spikeglx_converter=spikeglx_converter,
-            )
-
-            conversion_options = {
-                "imec0.ap": {"stub_test": testing},
-                "imec1.ap": {"stub_test": testing},
-                "nidq": {"stub_test": testing},
-            }
-            nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
-
-            odor_interface = OdorIntervalsInterface(preprocessed_data_directory=preprocessed_data_directory)
-            odor_interface.add_to_nwbfile(nwbfile=nwbfile)
-
-            spike_sorted_interface = SpikeSortedInterface(preprocessed_data_directory=preprocessed_data_directory)
-            spike_sorted_interface.add_to_nwbfile(
-                nwbfile=nwbfile, units_description="Curated spike sorting data across all probes."
-            )
 
     if nwbfile is None:
         message = "Something went wrong while creating the NWB file."
@@ -127,6 +96,8 @@ def odor_sequence_to_nwb(
     backend_configuration = neuroconv.tools.nwb_helpers.get_default_backend_configuration(
         nwbfile=nwbfile, backend="hdf5"
     )
+
+    nwbfile_path.parent.mkdir(parents=True, exist_ok=True)
     neuroconv.tools.nwb_helpers.configure_and_write_nwbfile(
         nwbfile=nwbfile, nwbfile_path=nwbfile_path, backend_configuration=backend_configuration
     )
