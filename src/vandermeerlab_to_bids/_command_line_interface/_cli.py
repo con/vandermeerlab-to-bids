@@ -46,14 +46,14 @@ def _vandermeerlab_to_bids_convert_cli():
     "--subject",
     help="ID of the subject.",
     required=False,
-    type=str | None,
+    type=str,
     default=None,
 )
 @click.option(
     "--session",
     help="ID of the subject.",
     required=False,
-    type=str | None,
+    type=str,
     default=None,
 )
 @click.option(
