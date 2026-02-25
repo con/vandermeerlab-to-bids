@@ -31,13 +31,15 @@ def odor_sequence_to_nwb(
     if subject_id is not None and session_id is not None:
         subject_and_session_ids = [(subject_id, session_id)]
     else:
-        subject_and_session_ids = [
-            (subject_dir.stem, session_dir.stem.removeprefix(f"{subject_dir.stem}-"))
-            for subject_dir in data_directory.iterdir()
-            if subject_dir.is_dir()
-            for session_dir in (subject_dir / "preprocessed").iterdir()
-            if session_dir.is_dir()
-        ]
+        subject_and_session_ids = sorted(
+            [
+                (subject_dir.stem, session_dir.stem.removeprefix(f"{subject_dir.stem}-"))
+                for subject_dir in data_directory.iterdir()
+                if subject_dir.is_dir()
+                for session_dir in (subject_dir / "preprocessed").iterdir()
+                if session_dir.is_dir()
+            ]
+        )
 
     for subject_id, session_id in tqdm.tqdm(
         iterable=subject_and_session_ids, desc="Converting session(s)", unit="sessions", position=0, leave=True
@@ -80,7 +82,7 @@ def odor_sequence_to_nwb(
                 }
                 conversion_options["imec0.ap"]["iterator_options"]["progress_bar_options"]["desc"] = "imec0.ap"
                 conversion_options["imec0.ap"]["iterator_options"]["progress_bar_options"]["desc"] = "imec1.ap"
-                conversion_options["nidq"]["iterator_options"]["progress_bar_options"]["position"] = "nidq"
+                conversion_options["nidq"]["iterator_options"]["progress_bar_options"]["desc"] = "nidq"
 
                 nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
             case "processed":
