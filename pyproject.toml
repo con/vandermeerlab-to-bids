@@ -10,7 +10,7 @@ packages = ["src/vandermeerlab_to_bids"]
 
 [project]
 name = "vandermeerlab_to_bids"
-version="1.0.8"
+version="1.0.9"
 authors = [
   { name="Cody Baker", email="cody.c.baker.phd@gmail.com" },
 ]
