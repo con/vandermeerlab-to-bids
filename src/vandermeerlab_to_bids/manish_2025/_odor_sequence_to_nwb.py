@@ -62,7 +62,7 @@ def odor_sequence_to_nwb(
                     / filename
                 )
                 if skip_if_exists and nwbfile_path.exists():
-                    return
+                    continue
 
                 spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
 
@@ -78,6 +78,10 @@ def odor_sequence_to_nwb(
                     "imec1.ap": conversion_options,
                     "nidq": conversion_options,
                 }
+                conversion_options["imec0.ap"]["iterator_options"]["progress_bar_options"]["desc"] = "imec0.ap"
+                conversion_options["imec0.ap"]["iterator_options"]["progress_bar_options"]["desc"] = "imec1.ap"
+                conversion_options["nidq"]["iterator_options"]["progress_bar_options"]["position"] = "nidq"
+
                 nwbfile = spikeglx_converter.create_nwbfile(metadata=metadata, conversion_options=conversion_options)
             case "processed":
                 # spikeglx_converter = neuroconv.converters.SpikeGLXConverterPipe(folder_path=raw_data_directory)
