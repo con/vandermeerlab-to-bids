@@ -1,8 +1,9 @@
+import re
+
 import neuroconv
 import numpy
 import pydantic
 import pynwb
-import re
 
 from ...utils import read_experiment_keys_file
 

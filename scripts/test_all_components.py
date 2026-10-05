@@ -12,11 +12,11 @@ import warnings
 import hdmf.build.warnings
 import neuroconv.converters
 import pynwb
-import vandermeerlab_to_bids.utils
 import pynwb.testing.mock.file
 
 import vandermeerlab_to_bids
 import vandermeerlab_to_bids.manish_2025
+import vandermeerlab_to_bids.utils
 
 # Define base folder of source data
 # Change these as needed on new systems

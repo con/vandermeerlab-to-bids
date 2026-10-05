@@ -1,5 +1,6 @@
-import typing
 import pathlib
+import typing
+
 import click
 
 from ..manish_2025._odor_sequence_to_nwb import odor_sequence_to_nwb
@@ -9,14 +10,12 @@ from ..manish_2025._odor_sequence_to_nwb import odor_sequence_to_nwb
 @click.group()
 def _vandermeerlab_to_bids_cli():
     """Tools for managing data from the van der Meer Lab."""
-    pass
 
 
 # vandermeerlab2bids convert
 @_vandermeerlab_to_bids_cli.group(name="convert")
 def _vandermeerlab_to_bids_convert_cli():
     """Data conversion tools for van der Meer Lab."""
-    pass
 
 
 # vandermeerlab2bids convert nwb

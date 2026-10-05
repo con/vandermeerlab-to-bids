@@ -2,13 +2,12 @@
 
 import pathlib
 import typing
-
-import pydantic
 import warnings
 
-import tqdm
 import hdmf.build.warnings
 import neuroconv.converters
+import pydantic
+import tqdm
 
 from .interfaces import OdorIntervalsInterface, SpikeSortedInterface
 from ..utils import enhance_metadata

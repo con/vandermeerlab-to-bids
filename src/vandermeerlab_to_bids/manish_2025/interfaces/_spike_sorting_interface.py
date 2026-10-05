@@ -1,5 +1,6 @@
 import neuroconv
 import pydantic
+
 from ._spike_sorting_extractor import VanDerMeerSortingExtractor
 
 

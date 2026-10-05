@@ -1,9 +1,10 @@
 """Reader for the custom 'ExpKey' structured text metadata file used by the van der Meer Lab."""
 
-import pathlib
-import pydantic
-import re
 import json
+import pathlib
+import re
+
+import pydantic
 
 
 @pydantic.validate_call

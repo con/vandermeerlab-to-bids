@@ -1,5 +1,6 @@
-from ._base_validator import BaseValidator
 import numpy
+
+from ._base_validator import BaseValidator
 from ..utils import read_experiment_keys_file
 
 

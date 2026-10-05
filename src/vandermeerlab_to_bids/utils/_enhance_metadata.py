@@ -1,9 +1,9 @@
 import datetime
 
-import pydantic
 import dateutil.tz
-import neuroconv.utils.dict
 import neuroconv.converters
+import neuroconv.utils.dict
+import pydantic
 
 from ._experiment_keys import read_experiment_keys_file
 

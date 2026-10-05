@@ -1,13 +1,13 @@
-import warnings
-from typing import Dict, Union
-import typing
 import pathlib
+import typing
+import warnings
+
+import numpy
 import numpy as np
 import pydantic
-from spikeinterface import BaseSorting
 import pymatreader
 import spikeinterface
-import numpy
+from spikeinterface import BaseSorting
 
 
 class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
@@ -89,7 +89,7 @@ class VanDerMeerSortingExtractor(spikeinterface.BaseSorting):
 
 
 class VanDerMeerSortingSegment(spikeinterface.BaseSortingSegment):
-    def __init__(self, sampling_frequency: float, spike_times_by_unit_id: Dict[int, np.ndarray]):
+    def __init__(self, sampling_frequency: float, spike_times_by_unit_id: dict[int, np.ndarray]):
         super().__init__()
         self._sampling_frequency: float = sampling_frequency
         self._spike_times_by_unit_id: dict[int, np.ndarray] = spike_times_by_unit_id
@@ -97,8 +97,8 @@ class VanDerMeerSortingSegment(spikeinterface.BaseSortingSegment):
     def get_unit_spike_train(
         self,
         unit_id: int,
-        start_frame: Union[int, None] = None,
-        end_frame: Union[int, None] = None,
+        start_frame: int | None = None,
+        end_frame: int | None = None,
     ) -> np.ndarray:
         times = np.array(self._spike_times_by_unit_id[unit_id])
         frames = (times * self._sampling_frequency).astype(int)
